@@ -9,14 +9,33 @@ on:
   pull_request:
     branches: [ main ]
 
+<<<<<<< HEAD
 jobs:
   build:
 
+=======
+jobs:  
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: npm install and build webpack
+        run:
+          npm install
+          npm run build
+        
+  test:  
+>>>>>>> fc691c96de340b02e67724012fb304f919bb0b60
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
+<<<<<<< HEAD
         node-version: [10.x, 12.x, 14.x, 15.x]
+=======
+        node-version: [10.x, 12.x]
+        os: [ubuntu-latest, windows-2016]      
+>>>>>>> fc691c96de340b02e67724012fb304f919bb0b60
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -25,6 +44,16 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
+<<<<<<< HEAD
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+=======
+    - name: npm install, and test
+      run: |
+        npm install
+        npm test
+      env:
+        CI: true
+        
+>>>>>>> fc691c96de340b02e67724012fb304f919bb0b60
