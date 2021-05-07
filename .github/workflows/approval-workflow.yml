@@ -8,7 +8,7 @@ jobs:
       - name: Label approved pull requests
         uses: abinoda/label-when-approved-action@1.0.5
         env:
-          APPROVALS: "2"
+          APPROVALS: "1"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ADD_LABEL: "approved"
           REMOVE_LABEL: "awaiting%20review"
