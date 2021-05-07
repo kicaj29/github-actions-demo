@@ -1,1 +1,2 @@
 name: Teamn approval worflow
+on: [pull_request_review]
