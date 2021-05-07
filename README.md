@@ -61,7 +61,9 @@ https://github-actions-hero.vercel.app/playground
 Using https://developers.giphy.com/dashboard/?create=true create a GIPHY_TOKEN and add it to the secrets: 
 ![004-giphy-token.png](./images/004-giphy-token.png)
 
+If we will add comment that starts with `/giphy` then selected git will be added by this workflow:
 
+![005-giphy-gif.png](./images/005-giphy-gif.png)
 
 # links
 https://github.com/a-a-ron/github-actions-course-template   
