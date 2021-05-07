@@ -9,6 +9,7 @@ jobs:
         uses: abinoda/label-when-approved-action@1.0.5
         # This action adds label to a pull request when specific amount of approvals have been set, also it can remove existing label in case 
         # specific amount of approvals have been set.
+        # NOTE: to have correctly working action first use label hast to be created manually in https://github.com/kicaj29/github-actions-demo/issues/labels
         env:
           APPROVALS: "1"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
