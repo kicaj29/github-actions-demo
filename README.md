@@ -35,5 +35,13 @@ https://docs.github.com/en/actions/guides/storing-workflow-data-as-artifacts
 
 Use ```needs: [job-name]``` to control when to start particular jobs.
 
+# Tools
+
+## Visualization
+
+Use https://github-actions-hero.vercel.app/ and its playground to visualize a workflow.
+In this view it is easy to understand which parts are executed in parallel.
+https://github-actions-hero.vercel.app/playground   
+
 # links
 https://github.com/a-a-ron/github-actions-course-template   
