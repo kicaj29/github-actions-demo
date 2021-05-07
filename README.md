@@ -43,5 +43,18 @@ Use https://github-actions-hero.vercel.app/ and its playground to visualize a wo
 In this view it is easy to understand which parts are executed in parallel.
 https://github-actions-hero.vercel.app/playground   
 
+# Team approval workflow
+
+[approval-workflow.yml](./.github/workflows/approval-workflow.yml])
+
+* easy way to see when enough approvals has been achieved
+* branch protections: https://github.com/kicaj29/github-actions-demo/settings/branches
+* required review approvals
+* matrix build
+* save build artifacts
+* dedicated test job
+
 # links
 https://github.com/a-a-ron/github-actions-course-template   
+http://github.com/marketplace   
+https://github.com/marketplace/actions/label-approved-pull-requests   
