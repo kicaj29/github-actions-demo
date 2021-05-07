@@ -54,7 +54,18 @@ https://github-actions-hero.vercel.app/playground
 * save build artifacts
 * dedicated test job
 
+# Giphy generator
+
+[giphy-generator.yml](./.github/workflows/giphy-generator.yml)
+
+Using https://developers.giphy.com/dashboard/?create=true create a GIPHY_TOKEN and add it to the secrets: 
+![004-giphy-token.png](./images/004-giphy-token.png)
+
+
+
 # links
 https://github.com/a-a-ron/github-actions-course-template   
 http://github.com/marketplace   
 https://github.com/marketplace/actions/label-approved-pull-requests   
+https://github.com/marketplace/actions/giphy-generator   
+https://lab.github.com
