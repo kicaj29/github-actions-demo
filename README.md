@@ -1,3 +1,5 @@
+# yml syntax
+https://onlineyamltools.com/convert-yaml-to-json
 # Auto-complete
 
 In online github editor make sure that cursor is set in the right place - only then auto complete appears.   
@@ -10,7 +12,7 @@ VSCode auto-complete seems to be fine:
 ![003-vscode-edit-working-auto-complete.png](./images/003-vscode-edit-working-auto-complete.png)
 
 
-# Run multiple commands.
+# Run command
 
 This will run only one command npm install and second command npm test will be **silently skipped**:
 ```
@@ -23,6 +25,21 @@ Use ```|``` to run multiple commands:
 run: |
     npm install
     npm test
+```
+
+To run next command only if previous was successful:
+
+```
+run: |
+    npm install && npm test
+```
+
+## Run command and specify working directory
+```
+run: |
+    npm install && npm test
+working-directory: |
+    ./src/project    
 ```
 
 # Jobs
@@ -65,10 +82,106 @@ If we will add comment that starts with `/giphy` then selected git will be added
 
 ![005-giphy-gif.png](./images/005-giphy-gif.png)
 
+# Custom github actions
+
+When to create github actions (not only re-use reason):
+
+* Control flow: you need more control flow structures then simple if conditions
+  
+Without github action:
+
+```yml
+run: |
+    npm install && npm test
+working-directory: |
+    ./src/project
+run: |
+    npm install && npm test
+working-directory: |
+    ./src/another
+run: |
+    npm install && npm test
+working-directory: |
+    ./src/yet-another        
+```
+
+With github action:
+
+```yml
+name: Build
+uses: actions/npm-build@v1
+with:
+    working-directories:
+        - src/project
+        - src/another
+        - src.yet-another
+```
+
+* Diagnostic: you need to handle errors to make them easier to diagnose
+
+In workflow it is not possible to specify job that runs only when another job failed:
+
+```yml
+jobs:
+    install:
+        steps:
+            - name: Clean install
+              run: npm ci
+    build:
+        needs: install
+        steps:
+            - name: Build
+              run: npm run build
+    error:
+        steps:
+            - name: Handle error
+              run: ...
+              
+```
+  
+* Complexity  
+ 
+Workflows are declarative and are designed to specify a processes in high level of abstraction. Details should be handled outside of the workflow in actions where are better tools to handle complexity.
+
+For example running a command line with many parameters could be encapsulated in github action:
+
+```yml
+- name: Deploy
+  env:
+    USER: ${{secrets.USER}}
+    PWD: ${{secrets.PWD}}
+  run: |
+    curls -Ss \
+    --fail \
+    -X POST \
+    -T path/to/app.zip \
+    -u $USER:$PWD \
+    https://example.com/app
+
+```
+
+* Re-use
+
+```yml
+jobs:
+    build_and_deploy:
+        steps:
+            - name: Build & Deploy
+              uses: ./npm-deploy@v1
+    build_and_deploy_another:
+        steps:
+            - name: Build & Deploy
+              uses: ./npm-deploy@v1          
+    and_another:
+        steps:
+            - name: Build & Deploy
+              uses: ./npm-deploy@v1              
+```
 # links
 https://github.com/a-a-ron/github-actions-course-template   
 http://github.com/marketplace   
 https://github.com/marketplace/actions/label-approved-pull-requests   
 https://github.com/marketplace/actions/giphy-generator   
 https://lab.github.com   
-test
+https://github.com/nektos/act (Run your GitHub Actions locally)   
+
