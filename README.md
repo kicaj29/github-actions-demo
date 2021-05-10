@@ -1,3 +1,26 @@
+- [yml syntax](#yml-syntax)
+- [Auto-complete](#auto-complete)
+- [Run command](#run-command)
+  - [Run command and specify working directory](#run-command-and-specify-working-directory)
+- [Jobs](#jobs)
+  - [Sharing data between jobs](#sharing-data-between-jobs)
+  - [By default jobs run in parallel](#by-default-jobs-run-in-parallel)
+- [Tools](#tools)
+  - [Visualization](#visualization)
+- [Team approval workflow](#team-approval-workflow)
+- [Giphy generator](#giphy-generator)
+- [Custom github actions](#custom-github-actions)
+  - [When to create github actions](#when-to-create-github-actions)
+  - [Github actions return value](#github-actions-return-value)
+  - [Github actions exit code](#github-actions-exit-code)
+  - [Github action types](#github-action-types)
+    - [JavaScript actions](#javascript-actions)
+    - [Docker actions:](#docker-actions)
+  - [Github action metadata](#github-action-metadata)
+  - [Github actions - communicating with the Host by using logging commands](#github-actions---communicating-with-the-host-by-using-logging-commands)
+  - [Public vs. private actions](#public-vs-private-actions)
+  - [Github actions - runtime](#github-actions---runtime)
+- [links](#links)
 # yml syntax
 https://onlineyamltools.com/convert-yaml-to-json
 # Auto-complete
@@ -84,6 +107,9 @@ If we will add comment that starts with `/giphy` then selected git will be added
 
 # Custom github actions
 
+Actions run in their own isolated process.
+
+## When to create github actions
 When to create github actions (not only re-use reason):
 
 * Control flow: you need more control flow structures then simple if conditions
@@ -177,6 +203,170 @@ jobs:
             - name: Build & Deploy
               uses: ./npm-deploy@v1              
 ```
+
+## Github actions return value
+
+```yml
+${{ steps id outputs name }}
+```
+id: step name?   
+name: name of the output parameter?
+
+## Github actions exit code
+
+exit 0 - success
+exit 1 - fail
+
+The workflow looks on action exit code to decide whether should continue with the next step or should stop with an error.
+
+## Github action types
+
+### JavaScript actions
+
+Pros:
+* fast: run directly on the host machine
+* development support: easy to integrate with the github environment
+
+Cons:
+* require setup: any external dependencies must be installed
+
+### Docker actions:
+
+Pros:
+* you can package everything in a single container and the workflow runs it as a unit
+* flexible: can run any software
+* consistent: action and its dependencies are bundled together so you do not need to worry about installing anything on the host
+
+Cons:
+* the are slower then JavaScript actions: it takes time do download and start a container
+* linux only
+
+## Github action metadata
+metadata: action name, descriptions, input and output params, if it is js or docker action.
+Metadata are stored in file ```action.yml```.
+
+```yml
+    name: 'My super action'
+    description: 'Super description'
+    author: 'Jacek'
+    inputs:
+        parameter-name:
+            description: 'An input parameter.'
+            required: true # by default params are optional
+    outputs:
+        output-value-name:
+            description: 'A value returned by the action.'
+
+    # for JS actions:
+    runs:
+        using: 'node12'
+        main: 'lib/main.js' # entry point
+    # for docker actions:
+    runs:
+        using: 'docker'
+        image: 'Dockerfile'
+    # or:
+    runs:
+        using: 'dockerfile'
+        image: 'docker://image:tag'
+
+    # if we want publish an action in the github marketplace:
+    branding:
+        icon: 'power' # it has to be one of icon offered by http://feathericons.com/
+        color: 'yellow'
+```
+
+## Github actions - communicating with the Host by using logging commands
+
+Logging commands are instructions for the workflow host that are embedded in the build log.   
+
+WORKFLOW -> BUILD LOG -> HOST
+
+Syntax:
+```
+::log-command param1=arg,param2=arg::command value
+```
+
+Sample logging commands:
+```
+::set-env name=DEBUG::1
+::set-output name=name_of_param::value
+::add-path::/path/to/directory                  # adds path to the PATH variable of the host
+::debug:: file=name, line=0,col=0::message      # file, line, col are optional
+::warning:: file=name, line=0,col=0::message    # file, line, col are optional
+::error:: file=name, line=0,col=0::message      # file, line, col are optional
+::add-mask::message                             #masked message (for example for secret value)
+::add-mask::$VARIABLE                           #masked message (for example for secret value)
+::stops-commands::token                         # tells the host to stop interpreting the logs as commands
+::token::                                       # tells the host to start interpreting the logs as commands                              
+```
+
+Log:
+```
+Download action repository...
+Setting environment variables...
+::set-env name=DEBUG::1
+[command]program --param=arg
+running program with `arg`...
+Done
+```
+
+```
+::set-env name=DEBUG::1
+```
+means
+```yml
+env:
+    DEBUG:1
+```
+
+## Public vs. private actions
+
+* public: workflow and action are stored in different repositories. Create public actions if they will be used in many different workflows.
+* private: workflow and action are stored in the same repo
+* public and private actions are referenced differently from a workflow:
+  * public
+    ```yml
+    - name: public action
+      uses: owner/repo@ref # ref can be commit or tag (version), semantic versioning has to be used, branch name
+    ```
+    ```yml
+    - name: public action
+      uses: owner/repo@12az34
+    ```
+    ```yml
+    - name: public action
+      uses: owner/repo@v1.2.3
+    ```
+    ```yml
+    - name: public action
+      uses: owner/repo@master
+    ```
+    In case of docker image additionally it is possible to specify docker image url:
+    ```yml
+    - name: public action
+      uses: docker://image:tag
+    ```  
+  * private
+    ```yml
+    - name private action
+      uses: ./.github/actions/...  # it is convention to use such path
+    ```
+
+For repository proper permissions have to be configured:
+![006-actions-permissions.png](./images/006-actions-permissions.png)   
+
+>NOTE: Public in public action does it mean that source code of the action will be available for all. You can have public action that is hosted in private repository in which case it is only available to other repositories that are part of the same organization.
+
+## Github actions - runtime
+
+* first an event that triggers a workflow is fired
+* next all needed actions are downloaded
+* temporary workspace directory is created, every time it has different name so we have to refer to it using ```$GITHUB_WORKSPACE```
+* to access the workspace actions can use ```upload-artifact``` and ```download-artifact`` actions
+* the workspace folder is deleted when the workflow is done
+* to check what events triggered the workflow read ```event.json```. This file is also temporary and can be read using ```$GITHUB_EVENT_PATH```.
+
 # links
 https://github.com/a-a-ron/github-actions-course-template   
 http://github.com/marketplace   
