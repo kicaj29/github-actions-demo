@@ -22,7 +22,7 @@
   - [Github actions - runtime](#github-actions---runtime)
   - [Create JavaScript action using TypeScript](#create-javascript-action-using-typescript)
     - [Setting up the environment](#setting-up-the-environment)
-    - [](#)
+  - [Enable debug level in GitHub actions](#enable-debug-level-in-github-actions)
 - [links](#links)
 # yml syntax
 https://onlineyamltools.com/convert-yaml-to-json
@@ -414,7 +414,10 @@ After this you can set breakpoint in a test and press `F5` to start debugging:
 
 ![012-jest-debugging.png](./images/012-jest-debugging.png)
 
-### 
+## Enable debug level in GitHub actions
+
+Create secret `ACTIONS_STEP_DEBUG` with value `true`. Then code like this
+```core.debug(`The previous version tag us ${previousTag}`);``` will appear in the log output.
 
 # links
 https://github.com/a-a-ron/github-actions-course-template   
