@@ -26,6 +26,7 @@
   - [Enable debug level in GitHub actions](#enable-debug-level-in-github-actions)
   - [Create Docker action - auto release milestone](#create-docker-action---auto-release-milestone)
     - [Run action auto release milestone](#run-action-auto-release-milestone)
+  - [Publishing actions](#publishing-actions)
 - [Versioning](#versioning)
 - [links](#links)
 # yml syntax
@@ -480,6 +481,15 @@ Next the github workflow should generate draft release for the closed milestone:
 
 ![019-milestone-release.png](./images/019-milestone-release.png)
 
+## Publishing actions
+
+![020-publish-action.png](./images/020-publish-action.png)
+![021-publish-action.png](./images/021-publish-action.png)
+![022-publish-action.png](./images/021-publish-action.png)
+![023-publish-action.png](./images/023-publish-action.png)
+
+
+https://github.com/marketplace/actions/kicaj-29-auto-release-milestone
 # Versioning
 
 First semantic versioning should be used when we create tags.
