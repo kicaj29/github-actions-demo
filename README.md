@@ -22,6 +22,7 @@
   - [Github actions - runtime](#github-actions---runtime)
   - [Create JavaScript action using TypeScript](#create-javascript-action-using-typescript)
     - [Setting up the environment](#setting-up-the-environment)
+    - [Use created actions](#use-created-actions)
   - [Enable debug level in GitHub actions](#enable-debug-level-in-github-actions)
 - [links](#links)
 # yml syntax
@@ -413,6 +414,31 @@ A new file `launch.json` will be created which has to be now updated to support 
 After this you can set breakpoint in a test and press `F5` to start debugging:
 
 ![012-jest-debugging.png](./images/012-jest-debugging.png)
+
+### Use created actions
+
+To use created action in repo: https://github.com/kicaj29/auto-release-draft add tag also in this repo to trigger the action. 
+
+```
+git tag -a v1.0.1 -m "This is version 1.0.1"
+git tag
+git push --tags
+```
+
+After pushing the tag a draft release is published:
+
+![013-draft-release.png](./images/013-draft-release.png)
+
+To remove tag:
+
+Local branch:
+```
+git tag -d v1.0.1
+```
+Remote branch:
+```
+git push origin :v1.0.1
+```
 
 ## Enable debug level in GitHub actions
 
