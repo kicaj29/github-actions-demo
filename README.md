@@ -73,6 +73,15 @@ working-directory: |
     ./src/project    
 ```
 
+This is helpful because every `run` commands starts by default in the checked out directory, for example: `/home/runner/work/github-action-publish-npm/github-action-publish-npm`. If we do not want use `working-directory` then we have to go with single `run` command, for example: 
+
+```
+- run: |
+    cd my-workspace && npm install && npm run build @kicaj29/lib1 --prod && cd dist/kicaj29/lib1 && npm publish
+```
+
+
+
 # Jobs
 
 ## Sharing data between jobs
