@@ -21,10 +21,9 @@
   - [Public vs. private actions](#public-vs-private-actions)
   - [Github actions - runtime](#github-actions---runtime)
   - [Create JavaScript action using TypeScript](#create-javascript-action-using-typescript)
-  - [Enable debug level in GitHub actions](#enable-debug-level-in-github-actions)
   - [Create Docker action - auto release milestone](#create-docker-action---auto-release-milestone)
-    - [Run action auto release milestone](#run-action-auto-release-milestone)
-  - [Publishing actions](#publishing-actions)
+  - [Enable debug level in GitHub actions](#enable-debug-level-in-github-actions)
+- [Publishing actions](#publishing-actions)
 - [Versioning](#versioning)
 - [links](#links)
 # yml syntax
@@ -386,42 +385,15 @@ For repository proper permissions have to be configured:
 
 Repo link: https://github.com/kicaj29/auto-release-draft
 
+## Create Docker action - auto release milestone
+
+Repository: https://github.com/kicaj29/github-action-docker-auto-release-milestone
+
 ## Enable debug level in GitHub actions
 
 Create secret `ACTIONS_STEP_DEBUG` with value `true`. Then code like this
 ```core.debug(`The previous version tag us ${previousTag}`);``` will appear in the log output.
-
-## Create Docker action - auto release milestone
-
-Repository: https://github.com/kicaj29/github-action-docker-auto-release-milestone   
-
-Before merging to the repo we have to make sure that `entrypoint.sh` is marked as executable.
-On Windows open bash terminal and execute:
-
-```
-git add --chmod=+x -- entrypoint.sh
-```
-Next commit and push the change.
-
-### Run action auto release milestone
-
-* create a milestone in github
-![015-create-milestone.png](./images/015-create-milestone.png)
-
-* create issues in the milestone
-![016-create-issues-in-milestone.png](./images/016-create-issues-in-milestone.png)
-
-* close both issues
-![017-close-both-issues.png](./images/017-close-both-issues.png)
-
-* in edit view close the milestone
-![018-close-milestone.png](./images/018-close-milestone.png)
-
-Next the github workflow should generate draft release for the closed milestone:
-
-![019-milestone-release.png](./images/019-milestone-release.png)
-
-## Publishing actions
+# Publishing actions
 
 ![020-publish-action.png](./images/020-publish-action.png)
 ![021-publish-action.png](./images/021-publish-action.png)
