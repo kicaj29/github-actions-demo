@@ -21,8 +21,6 @@
   - [Public vs. private actions](#public-vs-private-actions)
   - [Github actions - runtime](#github-actions---runtime)
   - [Create JavaScript action using TypeScript](#create-javascript-action-using-typescript)
-    - [Setting up the environment](#setting-up-the-environment)
-    - [Use created actions](#use-created-actions)
   - [Enable debug level in GitHub actions](#enable-debug-level-in-github-actions)
   - [Create Docker action - auto release milestone](#create-docker-action---auto-release-milestone)
     - [Run action auto release milestone](#run-action-auto-release-milestone)
@@ -386,74 +384,7 @@ For repository proper permissions have to be configured:
 
 ## Create JavaScript action using TypeScript
 
-An action that creates a GitHub release draft based on a newly created version tag, complete with change log.   
-
-It listens for a github web-hook called ```create``` - it is triggered when someone pushes a new branch or a new tag to repository.   
-
-Next it gets list of commits that happened since last version tag and uses their messages to draft a new github release.
-
-```git describe``` - to find last version tag   
-```git logs``` - to find commits between the last version tag and the new one just created
-
-### Setting up the environment
-
-Go to https://github.com/actions and create a new repo from a template.
-We will use TypeScript so go to repo https://github.com/actions/typescript-action.
-Next click Use this template to create a new repo: 
-
-![007-create-action-repo.png](./images/007-create-action-repo.png)
-
-Link to repo with this action: https://github.com/kicaj29/auto-release-draft
-
-Clone the repo and open it with VS code.
-Configure default tasks for build (CTRL + SHIFT + B) and test (CTRL + SHIFT + T).
-Open command palette to specify what commands(scripts) should be run when we trigger the tasks.
-
-![008-configure-default-tasks-vscode.png](./images/008-configure-default-tasks-vscode.png)
-
-Select ```npm build``` and ```npm test``` for the tasks.
-Next run npm install and check that build and tests are ok.
-
-Next configure launching the application. Since it is a github action we cannot simple run it locally outside of the workflow but we can launch test runner and optionally attach node debugger so we can debug our code from the unit tests. 
-
-To do this press `F5` and select `nodejs`:
-![009-vscode-config-nodejs.png](./images/009-vscode-config-nodejs.png)
-next select:
-![010-vscode-launch-json-file.png](./images/010-vscode-launch-json-file.png).   
-
-A new file `launch.json` will be created which has to be now updated to support jest. To generate configuration for `jest` click `Add Configuration` and select `jest`:
-![011-vscode-launch-json-file-jest.png](./images/011-vscode-launch-json-file-jest.png)
-
-After this you can set breakpoint in a test and press `F5` to start debugging:
-
-![012-jest-debugging.png](./images/012-jest-debugging.png)
-
-### Use created actions
-
-To use created action in repo: https://github.com/kicaj29/auto-release-draft add tag also in this repo to trigger the action. 
-
-```
-git tag -a v1.0.1 -m "This is version 1.0.1"
-git tag
-git push --tags
-```
-
-After pushing the tag a draft release is published:
-
-![013-draft-release.png](./images/013-draft-release.png)
-
-![014-draft-release-changelog.png](./images/014-draft-release-changelog.png)
-
-To remove tag:
-
-Local branch:
-```
-git tag -d v1.0.1
-```
-Remote branch:
-```
-git push origin :v1.0.1
-```
+Repo link: https://github.com/kicaj29/auto-release-draft
 
 ## Enable debug level in GitHub actions
 
